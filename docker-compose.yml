@@ -1,0 +1,19 @@
+# see https://docs.docker.com/compose/overview/
+# see https://docs.docker.com/compose/compose-file/
+# see https://github.com/opencontainers/image-spec/blob/master/annotations.md
+version: '3.8'
+services:
+  tests:
+    build:
+      context: .
+      labels: &labels
+        org.opencontainers.image.source: "${LABEL_IMAGE_SOURCE}"
+        org.opencontainers.image.description: "${LABEL_IMAGE_DESCRIPTION}"
+        org.opencontainers.image.revision: "${LABEL_IMAGE_REVISION}"
+    command:
+      - --viewport-size=1024x768
+      - --screenshot-path=c:/host/screenshot.png
+    volumes:
+      - ./tmp:c:/host
+    labels:
+      *labels

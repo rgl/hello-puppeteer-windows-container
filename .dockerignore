@@ -1,0 +1,7 @@
+tmp/
+node_modules/
+.*
+*.md
+*.ps1
+*.yml
+Dockerfile

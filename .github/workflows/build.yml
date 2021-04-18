@@ -1,0 +1,16 @@
+name: Build
+on: [push]
+jobs:
+  build:
+    name: Build
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: .\run.ps1
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifacts
+          path: |
+            tmp/

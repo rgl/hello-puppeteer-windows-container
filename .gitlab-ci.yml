@@ -1,0 +1,70 @@
+stages:
+  - test
+
+default:
+  before_script:
+    #
+    # enable strict mode and fail the job when there is an unhandled exception.
+    - |
+      Set-StrictMode -Version Latest
+      $FormatEnumerationLimit = -1
+      $ErrorActionPreference = 'Stop'
+      $ProgressPreference = 'SilentlyContinue'
+      trap {
+        Write-Output "ERROR: $_"
+        Write-Output (($_.ScriptStackTrace -split '\r?\n') -replace '^(.*)$','ERROR: $1')
+        Write-Output (($_.Exception.ToString() -split '\r?\n') -replace '^(.*)$','ERROR EXCEPTION: $1')
+        Exit 1
+      }
+    #
+    # show the entire job script (GitLab concatenates all the before_script lines
+    # and all the job script lines into a single file and executes it with
+    # PowerShell).
+    - |
+      Write-Output "$PSCommandPath content:"
+      Get-Content $PSCommandPath
+    #
+    # show all the environment variables.
+    - |
+      Get-ChildItem env: `
+        | Format-Table -AutoSize `
+        | Out-String -Width 4096 -Stream `
+        | ForEach-Object {$_.Trim()}
+    #
+    # define helper functions.
+    - |
+        function exec([ScriptBlock]$externalCommand, [string]$stderrPrefix='', [int[]]$successExitCodes=@(0)) {
+          $eap = $ErrorActionPreference
+          $ErrorActionPreference = 'Continue'
+          try {
+            &$externalCommand 2>&1 | ForEach-Object {
+              if ($_ -is [System.Management.Automation.ErrorRecord]) {
+                "$stderrPrefix$($_.Exception.Message)"
+              } else {
+                "$_"
+              }
+            }
+            if ($LASTEXITCODE -notin $successExitCodes) {
+              throw "$externalCommand failed with exit code $LASTEXITCODE"
+            }
+          } finally {
+            $ErrorActionPreference = $eap
+          }
+        }
+
+test:
+  stage: test
+  tags:
+    - vs2019
+  script:
+    - docker info
+    - |
+      # make the docker-compose project name unique to this job run.
+      # see run.ps1
+      # see https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
+      $env:COMPOSE_PROJECT_NAME = "$env:CI_PROJECT_PATH_SLUG-$env:CI_JOB_ID"
+    - exec {.\run.ps1}
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - tmp/

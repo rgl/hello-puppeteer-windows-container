@@ -1,0 +1,12 @@
+{
+    "name": "hello-puppeteer",
+    "description": "use puppeteer inside a windows container",
+    "repository": "https://github.com/rgl/hello-puppeteer-windows-container",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "main.js",
+    "dependencies": {
+        "commander": "^7.2.0",
+        "puppeteer": "^8.0.0"
+    }
+}
