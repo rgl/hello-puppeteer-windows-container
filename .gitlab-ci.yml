@@ -55,7 +55,7 @@ default:
 test:
   stage: test
   tags:
-    - vs2019
+    - vs2022
   script:
     - docker info
     - |

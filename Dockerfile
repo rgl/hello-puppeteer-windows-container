@@ -1,10 +1,10 @@
 # escape=`
-#FROM mcr.microsoft.com/windows/servercore:1809 # NB does not work in this base image.
-FROM mcr.microsoft.com/windows:1809
+#FROM mcr.microsoft.com/windows/servercore:ltsc2022 # NB does not work in this base image.
+FROM mcr.microsoft.com/windows/server:ltsc2022
 SHELL ["powershell.exe", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 RUN cd $env:TMP; `
-    $url = 'https://nodejs.org/dist/v14.16.1/node-v14.16.1-win-x64.zip'; `
-    $sha256 = 'e469db37b4df74627842d809566c651042d86f0e6006688f0f5fe3532c6dfa41'; `
+    $url = 'https://nodejs.org/dist/v18.12.1/node-v18.12.1-win-x64.zip'; `
+    $sha256 = '5478a5a2dce2803ae22327a9f8ae8494c1dec4a4beca5bbf897027380aecf4c7'; `
     Write-Host ('Downloading Node.js from {0}...' -f $url); `
     Invoke-WebRequest -Uri $url -OutFile node.zip; `
     Write-Host ('Verifying sha256 ({0})...' -f $sha256); `
@@ -22,6 +22,6 @@ ENV PATH='C:\Windows\System32;C:\Windows;C:\Windows\System32\WindowsPowerShell\v
 
 WORKDIR c:/app
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 COPY main.js ./
 ENTRYPOINT ["node", "main.js"]

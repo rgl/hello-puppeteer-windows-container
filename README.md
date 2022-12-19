@@ -17,13 +17,13 @@ Also see:
 
 ## Usage
 
-Install docker and docker-compose.
+Install docker and [docker compose](https://github.com/docker/compose/releases).
 
 Execute `run.ps1` inside a PowerShell session.
 
 See the contents of the `tmp` directory.
 
-**NB** This was tested in a Windows Server 2019 host. If you are using a different Windows version, you must modify the used container tag inside the [Dockerfile](Dockerfile).
+**NB** This was tested in a Windows Server 2022 host. If you are using a different Windows version, you must modify the used container tag inside the [Dockerfile](Dockerfile).
 
 ## Alternatives
 

@@ -12,9 +12,9 @@ $FormatEnumerationLimit = -1
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 trap {
-	Write-Output "ERROR: $_"
-	Write-Output (($_.ScriptStackTrace -split '\r?\n') -replace '^(.*)$', 'ERROR: $1')
-	Write-Output (($_.Exception.ToString() -split '\r?\n') -replace '^(.*)$', 'ERROR EXCEPTION: $1')
+	"ERROR: $_" | Write-Host
+	($_.ScriptStackTrace -split '\r?\n') -replace '^(.*)$','ERROR: $1' | Write-Host
+	($_.Exception.ToString() -split '\r?\n') -replace '^(.*)$','ERROR EXCEPTION: $1' | Write-Host
 	Exit 1
 }
 
@@ -37,10 +37,10 @@ function exec([ScriptBlock]$externalCommand, [string]$stderrPrefix = '', [int[]]
 	}
 }
 
-function docker-compose {
+function docker {
 	$arguments = $Args
-	Write-Output "Running docker-compose $($arguments | ConvertTo-Json -Compress)..."
-	exec {docker-compose.exe @arguments}
+	Write-Host "Running docker $($arguments | ConvertTo-Json -Compress)..."
+	exec {docker.exe @arguments}
 }
 
 # set the labels that will be associated with the container images
@@ -65,7 +65,7 @@ if ($env:CI_PROJECT_URL) {
 }
 
 # make sure we start from scratch.
-docker-compose down
+docker compose down
 if (!(Test-Path tmp)) {
 	mkdir tmp | Out-Null
 	# make sure the container can write to the host directory.
@@ -87,8 +87,8 @@ rm tmp/*
 
 # run the tests. then destroy everything.
 try {
-	docker-compose build
-	docker-compose run -T tests
+	docker compose build
+	docker compose run -T tests
 } finally {
-	docker-compose down
+	docker compose down
 }
