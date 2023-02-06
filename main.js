@@ -3,6 +3,10 @@
 const { program } = require('commander');
 const puppeteer = require('puppeteer');
 
+function log(message) {
+    console.log(`${new Date().toISOString()} ${message}`);
+}
+
 async function main(options) {
     var browserConfig = {};
     if (options.debug) {
@@ -12,6 +16,8 @@ async function main(options) {
             slowMo: 250,
         };
     }
+
+    log("Launching the browser...");
     const browser = await puppeteer.launch(browserConfig);
     const page = await browser.newPage();
     await page.setViewport({
@@ -19,9 +25,18 @@ async function main(options) {
         height: parseInt(options.viewportSize.split('x')[1], 10),
         deviceScaleFactor: 1,
     });
+    log(`Launched the ${await browser.version()} browser.`);
+
+    log(`Opening ${options.url}...`);
     await page.goto(options.url);
+
+    log("Taking a screenshot...");
     await page.screenshot({ path: options.screenshotPath });
+
+    log("Closing the browser...");
     await browser.close();
+
+    log("Exiting...");
 }
 
 program
