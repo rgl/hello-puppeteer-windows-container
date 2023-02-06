@@ -11,8 +11,8 @@ Also see:
 
 ## Caveats
 
-* Chromium only runs inside the [Windows base container image](https://hub.docker.com/_/microsoft-windows) (13.3GB).
-  * For more information see the [Container Base Images documentation](https://docs.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-base-images).
+* Chromium only runs inside the [windows/server base container image](https://hub.docker.com/_/microsoft-windows-server) (7.5GB).
+  * For more information see the [Container Base Images documentation](https://learn.microsoft.com/en-us/virtualization/windowscontainers/manage-containers/container-base-images).
 * Chromium only runs in headless mode.
 
 ## Usage
