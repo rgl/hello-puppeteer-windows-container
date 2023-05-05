@@ -16,6 +16,9 @@ async function main(options) {
             headless: false,
             devtools: true,
             slowMo: 250,
+            args: [
+                "--start-maximized"
+            ],
         };
     }
 
