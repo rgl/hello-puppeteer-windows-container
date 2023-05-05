@@ -8,7 +8,9 @@ function log(message) {
 }
 
 async function main(options) {
-    var browserConfig = {};
+    var browserConfig = {
+        headless: "new",
+    };
     if (options.debug) {
         browserConfig = {
             headless: false,
