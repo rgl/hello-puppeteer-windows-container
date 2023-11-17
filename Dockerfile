@@ -3,8 +3,8 @@
 FROM mcr.microsoft.com/windows/server:ltsc2022
 SHELL ["powershell.exe", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 RUN cd $env:TMP; `
-    $url = 'https://nodejs.org/dist/v18.16.0/node-v18.16.0-win-x64.zip'; `
-    $sha256 = '4b3bd4cb5570cc217490639e93a7e1b7a7a341981366661e514ce61941824a85'; `
+    $url = 'https://nodejs.org/dist/v20.9.0/node-v20.9.0-win-x64.zip'; `
+    $sha256 = '70d87dad2378c63216ff83d5a754c61d2886fc39d32ce0d2ea6de763a22d3780'; `
     Write-Host ('Downloading Node.js from {0}...' -f $url); `
     Invoke-WebRequest -Uri $url -OutFile node.zip; `
     Write-Host ('Verifying sha256 ({0})...' -f $sha256); `
